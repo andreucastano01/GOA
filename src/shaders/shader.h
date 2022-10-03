@@ -18,11 +18,6 @@ public:
                              const std::vector<Shape*> &objList,
                              const std::vector<PointLightSource> &lsList) const = 0;
 
-    virtual Vector3D depthcomputeColor(const Ray& r,
-        const std::vector<Shape*>& objList,
-        const std::vector<PointLightSource>& lsList,
-        Intersection& its) const;
-
     Vector3D bgColor;
 };
 

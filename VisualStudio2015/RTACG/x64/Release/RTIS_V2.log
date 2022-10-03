@@ -1,19 +1,7 @@
-﻿  intersectionshader.cpp
-C:\Users\andre\OneDrive\Escritorio\RTACG_Students\src\shaders\intersectionshader.cpp(26,16): warning C4244: 'inicializando': conversión de 'const _Ty' a 'int'; posible pérdida de datos
-          with
-          [
-              _Ty=double
-          ]
-C:\Users\andre\OneDrive\Escritorio\RTACG_Students\src\shaders\intersectionshader.cpp(27,16): warning C4244: 'inicializando': conversión de 'const _Ty' a 'int'; posible pérdida de datos
-          with
-          [
-              _Ty=double
-          ]
-C:\Users\andre\OneDrive\Escritorio\RTACG_Students\src\shaders\intersectionshader.cpp(28,16): warning C4244: 'inicializando': conversión de 'const _Ty' a 'int'; posible pérdida de datos
-          with
-          [
-              _Ty=double
-          ]
-main.obj : error LNK2001: símbolo externo "public: __cdecl DepthShader::DepthShader(struct Vector3D,double,struct Vector3D)" (??0DepthShader@@QEAA@UVector3D@@N0@Z) sin resolver
-intersectionshader.obj : error LNK2001: símbolo externo "public: virtual struct Vector3D __cdecl Shader::depthcomputeColor(class Ray const &,class std::vector<class Shape *,class std::allocator<class Shape *> > const &,class std::vector<class PointLightSource,class std::allocator<class PointLightSource> > const &,class Intersection &)const " (?depthcomputeColor@Shader@@UEBA?AUVector3D@@AEBVRay@@AEBV?$vector@PEAVShape@@V?$allocator@PEAVShape@@@std@@@std@@AEBV?$vector@VPointLightSource@@V?$allocator@VPointLightSource@@@std@@@5@AEAVIntersection@@@Z) sin resolver
-C:\Users\andre\OneDrive\Escritorio\RTACG_Students\VisualStudio2015\RTACG\x64\Release\RT_ACG.exe : fatal error LNK1120: 2 externos sin resolver
+﻿  main.cpp
+  Generando código
+  1 of 277 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Generación de código finalizada
+  RTIS_V2.vcxproj -> C:\Users\andre\OneDrive\Escritorio\RTACG_Students\GOA\VisualStudio2015\RTACG\x64\Release\RT_ACG.exe

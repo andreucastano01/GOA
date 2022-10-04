@@ -16,6 +16,7 @@
 
 #include "shaders/intersectionshader.h"
 #include "shaders/depthshader.h"
+#include "shaders/normalshader.h"
 
 
 
@@ -160,7 +161,8 @@ int main()
     Vector3D intersectionColor(1,0,0);
     
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
-    Shader *shader = new DepthShader(intersectionColor, 400.00, bgColor);
+    Shader *shader = new DepthShader(intersectionColor, 1000.00, bgColor);
+    //Shader *shader = new NormalShader();
   
 
     // Build the scene---------------------------------------------------------

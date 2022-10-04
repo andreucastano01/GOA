@@ -13,10 +13,10 @@ Vector3D DepthShader::computeColor(const Ray& r, const std::vector<Shape*>& objL
 {
     Intersection its;
     if (Utils::getClosestIntersection(r, objList, its)) {
-        int cx = std::max(1 - ((its.itsPoint.x - r.o.x) / maxDist), 0.0);
-        int cy = std::max(1 - ((its.itsPoint.y - r.o.y) / maxDist), 0.0);
-        int cz = std::max(1 - ((its.itsPoint.z - r.o.z) / maxDist), 0.0);
-        Vector3D depthColor = Vector3D(cx, cy, cz);
+        int cx = std::max(1.0 - ((its.itsPoint.x - r.o.x) / maxDist), 0.0);
+        int cy = std::max(1.0 - ((r.d.length() - r.o.length()) / maxDist), 0.0); //cambiar esto
+        int cz = std::max(1.0 - ((its.itsPoint.z - r.o.z) / maxDist), 0.0);
+        Vector3D depthColor = Vector3D(0, cy, 0);
         return depthColor;
     }
     else

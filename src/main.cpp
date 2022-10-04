@@ -161,7 +161,7 @@ int main()
     Vector3D intersectionColor(1,0,0);
     
     //Shader *shader = new IntersectionShader (intersectionColor, bgColor);
-    Shader *shader = new DepthShader(intersectionColor, 1000.00, bgColor);
+    Shader *shader = new DepthShader(intersectionColor, 100.00, bgColor);
     //Shader *shader = new NormalShader();
   
 

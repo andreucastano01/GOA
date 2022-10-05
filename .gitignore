@@ -31,3 +31,7 @@
 *.out
 *.app
 *.ipch
+VisualStudio2015/RTACG/x64/Release/RT_ACG.tlog/RT_ACG.write.1u.tlog
+*.tlog
+*.log
+*.pdb

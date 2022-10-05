@@ -160,7 +160,7 @@
     <ClCompile Include="..\..\src\materials\material.cpp" />
     <ClCompile Include="..\..\src\shaders\depthshader.cpp" />
     <ClCompile Include="..\..\src\shaders\intersectionshader.cpp" />
-    <ClCompile Include="..\..\src\shaders\nomalshader.cpp" />
+    <ClCompile Include="..\..\src\shaders\normalshader.cpp" />
     <ClCompile Include="..\..\src\shaders\shader.cpp" />
     <ClCompile Include="..\..\src\shapes\infiniteplan.cpp" />
     <ClCompile Include="..\..\src\shapes\shape.cpp" />

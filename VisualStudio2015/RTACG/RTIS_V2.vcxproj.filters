@@ -98,6 +98,12 @@
     <ClCompile Include="..\..\src\shaders\normalshader.cpp">
       <Filter>src\shaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\materials\phongmaterial.cpp">
+      <Filter>src\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shaders\directshader.cpp">
+      <Filter>src\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cameras\camera.h">
@@ -158,6 +164,12 @@
       <Filter>src\shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\shaders\normalshader.h">
+      <Filter>src\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\materials\phongmaterial.h">
+      <Filter>src\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\shaders\directshader.h">
       <Filter>src\shaders</Filter>
     </ClInclude>
   </ItemGroup>

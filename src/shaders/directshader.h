@@ -12,6 +12,7 @@ public:
         const std::vector<Shape*>& objList,
         const std::vector<PointLightSource>& lsList) const;
 
+    
     Vector3D Color;
 };
 

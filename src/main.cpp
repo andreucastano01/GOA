@@ -17,6 +17,7 @@
 #include "shaders/intersectionshader.h"
 #include "shaders/depthshader.h"
 #include "shaders/normalshader.h"
+#include "shaders/directshader.h"
 
 #include "materials/phongmaterial.h"
 
@@ -43,7 +44,7 @@ void buildSceneSphere(Camera*& cam, Film*& film,
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
     // (...)
-    //  EXAMPLE:Material *green_50 = new PhongMaterial (Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 50);
+    Material *green_50 = new PhongMaterial (Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 50);
 
 
     /* ******* */
@@ -56,17 +57,17 @@ void buildSceneSphere(Camera*& cam, Film*& film,
     // Define and place a sphere
     Matrix4x4 sphereTransform1;
     sphereTransform1 = sphereTransform1.translate(Vector3D(-1.0, -0.5, 2 * std::sqrt(2.0)));
-    Shape* s1 = new Sphere(0.25, sphereTransform1, NULL);
+    Shape* s1 = new Sphere(0.25, sphereTransform1, green_50);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform2;
     sphereTransform2 = sphereTransform2.translate(Vector3D(1.0, 0.0, 6));
-    Shape* s2 = new Sphere(1, sphereTransform2, NULL);
+    Shape* s2 = new Sphere(1, sphereTransform2, green_50);
 
     // Define and place a sphere
     Matrix4x4 sphereTransform3;
     sphereTransform3 = sphereTransform3.translate(Vector3D(0.3, -0.75, 3.5));
-    Shape* s3 = new Sphere(0.25, sphereTransform3, NULL);
+    Shape* s3 = new Sphere(0.25, sphereTransform3, green_50);
 
     // Store the objects in the object list
     objectsList->push_back(s1);
@@ -77,14 +78,14 @@ void buildSceneSphere(Camera*& cam, Film*& film,
     /* ****** */
     /* Lights */
     /* ****** */
-    //
-    // ADD YOUR LIGHT SOURCES HERE
-    // (...)
-    //
-    // DO NOT FORGET TO STORE THE LIGHT SOURCES IN THE "lightSourceList"
-    // (...)
-    //
     
+    // ADD YOUR LIGHT SOURCES HERE
+    PointLightSource *l1 = new PointLightSource(Vector3D(5, 1, 1), 10.00);
+    //PointLightSource *l2 = new PointLightSource(Vector3D(5, 1, 1), 1.00);
+    
+    // DO NOT FORGET TO STORE THE LIGHT SOURCES IN THE "lightSourceList"
+    lightSourceList = new std::vector<PointLightSource>;
+    lightSourceList->push_back(*l1);
 }
 
 void raytrace(Camera* &cam, Shader* &shader, Film* &film,
@@ -169,7 +170,10 @@ int main()
     //Shader *shader = new DepthShader(intersectionColor, 8.00, bgColor);
 
     //Task 4
-    Shader *shader = new NormalShader();
+    //Shader *shader = new NormalShader();
+
+    //Task 5
+    Shader* shader = new DirectShader();
   
 
     // Build the scene---------------------------------------------------------

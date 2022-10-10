@@ -12,6 +12,11 @@ public:
     virtual Vector3D getReflectance(const Vector3D& n, const Vector3D& wo,
         const Vector3D& wi) const;
 
+    bool hasSpecular() const;
+    bool hasTransmission() const;
+    bool hasDiffuseOrGlossy() const;
+    double getIndexOfRefraction() const;
+
 private:
     Vector3D diffuse_;
     Vector3D specular_;

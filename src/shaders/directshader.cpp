@@ -14,7 +14,7 @@ Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
             PointLightSource light = lsList[s];
             Vector3D Li = light.getIntensity(its.itsPoint);
             Vector3D wi = light.getPosition() - its.itsPoint;
-            wi.normalized();
+            wi = wi.normalized();
             Vector3D ref = its.shape->getMaterial().getReflectance(its.normal, -r.d, wi);
             Ray rl(its.itsPoint, wi, 0, -1000, 10000);
             int Vi = 0;

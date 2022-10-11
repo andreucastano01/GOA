@@ -12,14 +12,13 @@ PhongMaterial::PhongMaterial(Vector3D diffuse_, Vector3D specular_, int shinines
 Vector3D PhongMaterial::getReflectance(const Vector3D& n, const Vector3D& wo,
     const Vector3D& wi) const
 {
-    wi.normalized();
     Vector3D wr = (Vector3D(2.0) * dot(wi, n)) * n - wi;
     double wowr = dot(wo, wr);
 
     wowr = pow(wowr, shininess_);
     
     Vector3D r = diffuse_ * dot(wi, n) + specular_ * wowr;
-
+    
     return r;
 }
 

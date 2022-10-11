@@ -13,10 +13,10 @@ Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
         for (int s = 0; s < lsList.size(); s++) {
             PointLightSource light = lsList[s];
             Vector3D Li = light.getIntensity(its.itsPoint);
-            Vector3D ref = its.shape->getMaterial().getReflectance(its.normal, -r.d, light.getPosition() - its.itsPoint);
-            Ray rl;
-            rl.o = light.getPosition();
-            rl.d = its.itsPoint;
+            Vector3D wi = light.getPosition() - its.itsPoint;
+            wi.normalized();
+            Vector3D ref = its.shape->getMaterial().getReflectance(its.normal, -r.d, wi);
+            Ray rl(light.getPosition(), its.itsPoint, 5);
             int Vi = 1;
             if (Utils::hasIntersection(rl, objList)) Vi = 0;
             Lo += (Li * ref * Vi);

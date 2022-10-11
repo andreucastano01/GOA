@@ -44,7 +44,7 @@ void buildSceneSphere(Camera*& cam, Film*& film,
     /* DEFINE YOUR MATERIALS HERE */
     /* ************************** */
     // (...)
-    Material *green_50 = new PhongMaterial (Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 50);
+    Material *green_50 = new PhongMaterial (Vector3D(0.2, 0.7, 0.3), Vector3D(0.2, 0.6, 0.2), 1);
 
 
     /* ******* */
@@ -80,12 +80,13 @@ void buildSceneSphere(Camera*& cam, Film*& film,
     /* ****** */
     
     // ADD YOUR LIGHT SOURCES HERE
-    PointLightSource *l1 = new PointLightSource(Vector3D(5, 1, 1), 1.00);
-    //PointLightSource *l2 = new PointLightSource(Vector3D(5, 1, 1), 1.00);
+    PointLightSource *l1 = new PointLightSource(Vector3D(-1, 2, 1), 5.00);
+    //PointLightSource *l2 = new PointLightSource(Vector3D(10, 1, 1), 1.00);
     
     // DO NOT FORGET TO STORE THE LIGHT SOURCES IN THE "lightSourceList"
     lightSourceList = new std::vector<PointLightSource>;
     lightSourceList->push_back(*l1);
+    //lightSourceList->push_back(*l2);
 }
 
 void raytrace(Camera* &cam, Shader* &shader, Film* &film,

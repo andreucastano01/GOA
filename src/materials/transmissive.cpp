@@ -21,3 +21,7 @@ bool Transmissive::hasDiffuseOrGlossy() const {
 double Transmissive::getIndexOfRefraction() const {
     return 0.0;
 }
+
+Vector3D Transmissive::getDiffuseCoefficient() const {
+    return Vector3D(0.0);
+}

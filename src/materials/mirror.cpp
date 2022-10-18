@@ -21,3 +21,7 @@ bool Mirror::hasDiffuseOrGlossy() const {
 double Mirror::getIndexOfRefraction() const {
     return 0.0;
 }
+
+Vector3D Mirror::getDiffuseCoefficient() const {
+    return Vector3D(0.0);
+}

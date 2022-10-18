@@ -37,3 +37,4 @@ VisualStudio2015/RTACG/x64/Release/RT_ACG.tlog/RT_ACG.write.1u.tlog
 *.pdb
 *.db
 VisualStudio2015/RTACG/.vs/RT_ACG/v17/.suo
+*.vsidx

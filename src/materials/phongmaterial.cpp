@@ -2,7 +2,7 @@
 #include <iostream>
 
 PhongMaterial::PhongMaterial(): 
-    diffuse_(Vector3D(0.2, 0.7, 0.3)), specular_(Vector3D(0.2, 0.6, 0.2)), shininess_(50)
+    diffuse_(Vector3D(1.0)), specular_(Vector3D(1.0)), shininess_(50)
 { }
 
 PhongMaterial::PhongMaterial(Vector3D diffuse_, Vector3D specular_, int shininess_):
@@ -11,9 +11,8 @@ PhongMaterial::PhongMaterial(Vector3D diffuse_, Vector3D specular_, int shinines
 
 Vector3D PhongMaterial::getReflectance(const Vector3D& n, const Vector3D& wo, const Vector3D& wi) const
 {
-    double win = dot(wi, n);
-    Vector3D wr = -wi + Vector3D(2.0) * win * n;
-    wr = wr.normalized();
+    double win = dot(n, wi);
+    Vector3D wr = n * 2 * win - wi;
     double wowr = dot(wo, wr);
     wowr = pow(std::max(wowr, 0.0), shininess_);
     
@@ -36,4 +35,8 @@ bool PhongMaterial::hasDiffuseOrGlossy() const {
 
 double PhongMaterial::getIndexOfRefraction() const {
     return 0.0;
+}
+
+Vector3D PhongMaterial::getDiffuseCoefficient() const{
+    return diffuse_;
 }

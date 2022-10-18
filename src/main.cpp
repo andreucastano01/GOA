@@ -249,8 +249,10 @@ int main()
     //Shader *shader = new NormalShader();
 
     //Task 5
-    Shader* shader = new DirectShader();
-  
+    //Shader* shader = new DirectShader();
+
+    //Practica 2
+    Shader* shader = new GlobalShader();
 
     // Build the scene---------------------------------------------------------
     // 

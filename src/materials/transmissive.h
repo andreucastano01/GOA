@@ -14,6 +14,7 @@ public:
     bool hasTransmission() const;
     bool hasDiffuseOrGlossy() const;
     double getIndexOfRefraction() const;
+    Vector3D getDiffuseCoefficient() const;
 };
 
 #endif // TRANSMISSIVE_H

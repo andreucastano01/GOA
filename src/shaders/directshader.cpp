@@ -1,26 +1,35 @@
 #include "directshader.h"
 #include "../core/utils.h"
 
-DirectShader::DirectShader() :
-    Color(Vector3D(1, 0, 0))
+DirectShader::DirectShader()
+{ }
+
+DirectShader::DirectShader(Vector3D bgColor_) :
+    Shader(bgColor_)
 { }
 
 Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& objList, const std::vector<PointLightSource>& lsList) const
 {
-    Intersection its;
-    Vector3D Lo = Vector3D(0.0);
-    if (Utils::getClosestIntersection(r, objList, its)) {
-        for (int s = 0; s < lsList.size(); s++) {
-            PointLightSource light = lsList[s];
-            Vector3D Li = light.getIntensity(its.itsPoint);
-            Vector3D wi = light.getPosition() - its.itsPoint;
-            wi = wi.normalized();
-            Vector3D ref = its.shape->getMaterial().getReflectance(its.normal, -r.d, wi);
-            Ray rl(its.itsPoint, wi, 0, -1000, 10000);
-            int Vi = 0;
-            if (Utils::hasIntersection(rl, objList)) Vi = 1;
-            Lo += (Li * ref * Vi);
+    // Get the closest Intersection along the ray
+    Intersection its; // Auxiliar structure to store information about the intersection, in case there is one
+    if (Utils::getClosestIntersection(r, objList, its))
+    {
+        Vector3D Lo(0.0);
+        //Check if Phong Material
+        if (its.shape->getMaterial().hasDiffuseOrGlossy()) {
+            for (auto const& light : lsList) {
+                Vector3D P_L = light.getPosition() - its.itsPoint; //Vector from intersection point to lightsource
+                Vector3D wi = P_L.normalized(); //Normalized Vector wi
+                Ray ray_visibility(its.itsPoint, wi, 0, Epsilon, P_L.length());
+                if (Utils::hasIntersection(ray_visibility, objList))
+                    continue;
+                Lo += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
+            }
         }
+        // Once all light sources have been taken into account, return the final result
+        return Lo;
     }
-    return Lo;
+    else
+        return bgColor;
+
 }

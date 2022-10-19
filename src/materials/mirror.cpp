@@ -1,9 +1,14 @@
 #include "mirror.h"
 #include <iostream>
 
+
+Mirror::Mirror(Vector3D diffuse_) :
+    diffuse_(diffuse_)
+{ }
+
 Vector3D Mirror::getReflectance(const Vector3D& n, const Vector3D& wo, const Vector3D& wi) const
 {
-    return Vector3D(0, 0, 0);
+    return 0.0;
 }
 
 bool Mirror::hasSpecular() const {

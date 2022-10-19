@@ -27,6 +27,32 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 Lo += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
             }
         }
+        else if (its.shape->getMaterial().hasSpecular()) {
+            Vector3D wo = -r.d;
+            Vector3D wr = its.normal * 2 * dot(its.normal, wo) - wo;
+            Ray ray_r(its.itsPoint, wr, 0, Epsilon);
+
+            return computeColor(ray_r, objList, lsList);
+        }
+        else if (its.shape->getMaterial().hasTransmission()) {
+            Vector3D wo = -r.d;
+            double win = dot(its.normal, wo);
+            double sin2alpha = 1 - pow(win, 2);
+            double rad = 1 - pow(its.shape->getMaterial().getIndexOfRefraction(), 2) * sin2alpha;
+            if (rad < 0) {
+                Vector3D wr = its.normal * 2 * dot(its.normal, wo) - wo;
+                Ray ray_r(its.itsPoint, wr, 0, Epsilon);
+
+                return computeColor(ray_r, objList, lsList);
+            }
+            else { //Peta aqui
+                double temp1 = -sqrt(rad) + its.shape->getMaterial().getIndexOfRefraction() * win;
+                double t = dot(temp1, its.normal) - dot(its.shape->getMaterial().getIndexOfRefraction(), wo);
+                Ray ray_r(its.itsPoint, t, 0, Epsilon);
+
+                return computeColor(ray_r, objList, lsList);
+            }
+        }
         // Once all light sources have been taken into account, return the final result
         Vector3D Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
         return Lo + Li;

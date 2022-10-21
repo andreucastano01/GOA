@@ -47,8 +47,8 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 return computeColor(ray_r, objList, lsList);
             }
             else { //Peta aqui
-                double ntl = dot(refrac, wo);
-                Vector3D t = dot((-sqrt(rad) + refrac * win), its.normal); //Me falta restar el ntl
+                Vector3D ntl = Vector3D(wo.x * refrac, wo.y * refrac, wo.z * refrac);
+                Vector3D t = cross((-sqrt(rad) + refrac * win), its.normal) - ntl;
                 Ray ray_refrac(its.itsPoint, t, r.depth + 1);
 
                 return computeColor(ray_refrac, objList, lsList);

@@ -252,7 +252,8 @@ int main()
     //Shader* shader = new DirectShader();
 
     //Practica 2
-    Shader* shader = new GlobalShader();
+    //Implementation of Mirror and Transmissive
+    Shader* shader = new DirectShader();
 
     // Build the scene---------------------------------------------------------
     // 

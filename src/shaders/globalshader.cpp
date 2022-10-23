@@ -11,6 +11,7 @@ GlobalShader::GlobalShader(Vector3D bgColor_, Vector3D ambient) :
 
 Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& objList, const std::vector<PointLightSource>& lsList) const
 {
+    /*
     // Get the closest Intersection along the ray
     Intersection its; // Auxiliar structure to store information about the intersection, in case there is one
     if (Utils::getClosestIntersection(r, objList, its))
@@ -70,5 +71,5 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
     }
     else
         return bgColor;
-
+    */
 }

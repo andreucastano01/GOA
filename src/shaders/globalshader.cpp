@@ -1,5 +1,8 @@
 #include "globalshader.h"
 #include "../core/utils.h"
+#include "../core/hemisphericalsampler.h"
+
+#define PI 3.1415926535
 
 GlobalShader::GlobalShader() :
     ambient(Vector3D(0.1))
@@ -30,14 +33,35 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                     continue;
                 Lo += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
             }
+            
+            //Indirect Illumination
+            Vector3D Li(0.0);
+            if (r.depth == 0) {
+                int max_samples = 3;
+                Vector3D sumatorio(0.0);
+                for (int i = 0; i < max_samples; i++) {
+                    HemisphericalSampler sampler;
+                    Vector3D sample = sampler.getSample(its.normal);
+                    Ray indirect_ray(its.itsPoint, sample, r.depth + 1, Epsilon);
+                    sumatorio += computeColor(indirect_ray, objList, lsList);
+                }
+                double factor = (1 / (2 * PI * max_samples));
+                Li = Vector3D(factor * sumatorio.x, factor * sumatorio.y, factor * sumatorio.z);
+            }
+            else if (r.depth > 0) {
+                Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
+            }
+            return Lo + Li;
         }
+        //Check if Mirror Material
         else if (its.shape->getMaterial().hasSpecular()) {
             Vector3D wo = -r.d;
             Vector3D wr = its.normal * 2 * dot(its.normal, wo) - wo;
-            Ray ray_r(its.itsPoint, wr, r.depth + 1, Epsilon);
+            Ray ray_r(its.itsPoint, wr, r.depth, Epsilon);
 
             return computeColor(ray_r, objList, lsList);
         }
+        //Check if Transmissive Material
         else if (its.shape->getMaterial().hasTransmission()) {
             double refrac = its.shape->getMaterial().getIndexOfRefraction();
             Vector3D n = its.normal;
@@ -59,13 +83,11 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 Vector3D ntl = Vector3D(wo.x * refrac, wo.y * refrac, wo.z * refrac);
                 double square = (-sqrt(rad) + refrac * win);
                 Vector3D t = Vector3D(square * n.x, square * n.y, square * n.z) - ntl;
-                Ray ray_refrac(its.itsPoint, t, r.depth + 1);
+                Ray ray_refrac(its.itsPoint, t, r.depth, Epsilon);
 
                 return computeColor(ray_refrac, objList, lsList);
             }
         }
-        Vector3D Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
-        return Lo + Li;
     }
     else
         return bgColor;

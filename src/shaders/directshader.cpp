@@ -26,14 +26,17 @@ Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                     continue;
                 Lo += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
             }
+            return Lo;
         }
+        //Check if Mirror Material
         else if (its.shape->getMaterial().hasSpecular()) {
             Vector3D wo = -r.d;
             Vector3D wr = its.normal * 2 * dot(its.normal, wo) - wo;
-            Ray ray_r(its.itsPoint, wr, r.depth + 1, Epsilon);
+            Ray ray_r(its.itsPoint, wr, r.depth, Epsilon);
 
             return computeColor(ray_r, objList, lsList);
         }
+        //Check if Transmissive Material
         else if (its.shape->getMaterial().hasTransmission()) {
             double refrac = its.shape->getMaterial().getIndexOfRefraction();
             Vector3D n = its.normal;
@@ -47,7 +50,7 @@ Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
             double rad = 1 - pow(refrac, 2) * sin2alpha;
             if (rad < 0) {
                 Vector3D wr = n * 2 * dot(n, wo) - wo;
-                Ray ray_r(its.itsPoint, wr, r.depth + 1, Epsilon);
+                Ray ray_r(its.itsPoint, wr, r.depth, Epsilon);
 
                 return computeColor(ray_r, objList, lsList);
             }
@@ -55,12 +58,11 @@ Vector3D DirectShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 Vector3D ntl = Vector3D(wo.x * refrac, wo.y * refrac, wo.z * refrac);
                 double square = (-sqrt(rad) + refrac * win);
                 Vector3D t = Vector3D(square * n.x, square * n.y, square * n.z) - ntl;
-                Ray ray_refrac(its.itsPoint, t, r.depth + 1);
+                Ray ray_refrac(its.itsPoint, t, r.depth, Epsilon);
 
                 return computeColor(ray_refrac, objList, lsList);
             }
         }
-        return Lo;
     }
     else
         return bgColor;

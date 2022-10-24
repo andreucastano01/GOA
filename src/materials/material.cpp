@@ -16,8 +16,8 @@ double Material::getIndexOfRefraction() const
 Vector3D Material::getDiffuseCoefficient() const
 {
     std::cout << "Warning!"
-        << "Calling \"Material::getIndexOfRefraction()\""
-        << "for a non - transmissive material"
+        << "Calling \"Material::getDiffuseCoefficient()\""
+        << "for a non - diffuse or non - glossy material"
         << std::endl;
     return Vector3D(-1);
 }

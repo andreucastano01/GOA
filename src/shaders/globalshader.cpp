@@ -22,7 +22,7 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
     Intersection its; // Auxiliar structure to store information about the intersection, in case there is one
     if (Utils::getClosestIntersection(r, objList, its))
     {
-        Vector3D Lo(0.0);
+        Vector3D Lo_dir(0.0);
         //Check if Phong Material
         if (its.shape->getMaterial().hasDiffuseOrGlossy()) {
             for (auto const& light : lsList) {
@@ -31,27 +31,64 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 Ray ray_visibility(its.itsPoint, wi, 0, Epsilon, P_L.length());
                 if (Utils::hasIntersection(ray_visibility, objList))
                     continue;
-                Lo += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
+
+                Lo_dir += light.getIntensity(its.itsPoint) * its.shape->getMaterial().getReflectance(its.normal, -r.d, wi) * dot(its.normal, wi);
             }
+            //Indirect Illumination (2-bounces)
             
-            //Indirect Illumination
-            Vector3D Li(0.0);
+            Vector3D Lo_ind(0.0);
             if (r.depth == 0) {
                 int max_samples = 2;
                 Vector3D sumatorio(0.0);
                 for (int i = 0; i < max_samples; i++) {
                     HemisphericalSampler sampler;
                     Vector3D sample = sampler.getSample(its.normal);
-                    Ray indirect_ray(its.itsPoint, sample, r.depth + 1, Epsilon);
-                    sumatorio += computeColor(indirect_ray, objList, lsList) * its.shape->getMaterial().getReflectance(its.normal, -r.d, indirect_ray.d);
+                    Ray indirect_ray(its.itsPoint, -sample, r.depth + 1, Epsilon);
+                    sumatorio += computeColor(indirect_ray, objList, lsList);
                 }
                 double factor = (1 / (2 * PI * max_samples));
-                Li = Vector3D(factor * sumatorio.x, factor * sumatorio.y, factor * sumatorio.z);
+                Lo_ind = Vector3D(factor * sumatorio.x, factor * sumatorio.y, factor * sumatorio.z);
             }
             else if (r.depth > 0) {
-                return ambient * its.shape->getMaterial().getDiffuseCoefficient();
+                Lo_ind = ambient * its.shape->getMaterial().getDiffuseCoefficient();
             }
-            return Lo + Li;
+            return Lo_dir + Lo_ind;
+            /*
+            //Indirect Illumination (n-bounces)
+            Vector3D Lo_ind(0.0);
+            int maxdepth = 2;
+            if (r.depth == 0) {
+                int max_samples = 2;
+                Vector3D sumatorio(0.0);
+                for (int i = 0; i < max_samples; i++) {
+                    HemisphericalSampler sampler;
+                    Vector3D sample = sampler.getSample(its.normal);
+                    Ray indirect_ray(its.itsPoint, -sample, r.depth + 1, Epsilon);
+                    sumatorio += computeColor(indirect_ray, objList, lsList);
+                }
+                double factor = (1 / (2 * PI * max_samples));
+                Lo_ind = Vector3D(factor * sumatorio.x, factor * sumatorio.y, factor * sumatorio.z);
+            }
+            else if (r.depth == maxdepth) {
+                Lo_ind = ambient * its.shape->getMaterial().getDiffuseCoefficient();
+            }
+            else {
+                //Sample direction: normal at p
+                Ray normal_ray(its.itsPoint, its.normal, r.depth + 1, Epsilon);
+                //Sample direction: perfect reflection direction
+                Vector3D perf_d = its.normal * 2 * dot(its.normal, -r.d) - (-r.d);
+                Ray perf_ray(its.itsPoint, perf_d, r.depth + 1, Epsilon);
+
+                Vector3D suma1 = computeColor(normal_ray, objList, lsList);
+                Vector3D suma2 = computeColor(perf_ray, objList, lsList);
+
+                Vector3D suma = suma1 + suma2;
+                
+                double factor2 = (1 / (4 * PI));
+                Lo_ind = Vector3D(factor2 * suma.x, factor2 * suma.y, factor2 * suma.z);
+            }
+
+            return Lo_dir + Lo_ind;*/
         }
         //Check if Mirror Material
         else if (its.shape->getMaterial().hasSpecular()) {
@@ -91,4 +128,5 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
     }
     else
         return bgColor;
+
 }

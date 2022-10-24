@@ -5,13 +5,16 @@ GlobalShader::GlobalShader() :
     ambient(Vector3D(0.1))
 { }
 
+GlobalShader::GlobalShader(Vector3D ambient) :
+    ambient(ambient)
+{ }
+
 GlobalShader::GlobalShader(Vector3D bgColor_, Vector3D ambient) :
     Shader(bgColor_), ambient(ambient)
 { }
 
 Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& objList, const std::vector<PointLightSource>& lsList) const
 {
-    /*
     // Get the closest Intersection along the ray
     Intersection its; // Auxiliar structure to store information about the intersection, in case there is one
     if (Utils::getClosestIntersection(r, objList, its))
@@ -36,40 +39,34 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
             return computeColor(ray_r, objList, lsList);
         }
         else if (its.shape->getMaterial().hasTransmission()) {
-            Vector3D wo = -r.d;
-            double win = dot(its.normal, wo);
-            double sin2alpha = 1 - pow(win, 2);
             double refrac = its.shape->getMaterial().getIndexOfRefraction();
+            Vector3D n = its.normal;
+            if (dot(its.normal, r.d) > 0.0) {
+                n = -its.normal;
+                refrac = 1 / refrac;
+            }
+            Vector3D wo = -r.d;
+            double win = dot(n, wo);
+            double sin2alpha = 1 - pow(win, 2);
             double rad = 1 - pow(refrac, 2) * sin2alpha;
             if (rad < 0) {
-                Vector3D wr = its.normal * 2 * dot(its.normal, wo) - wo;
+                Vector3D wr = n * 2 * dot(n, wo) - wo;
                 Ray ray_r(its.itsPoint, wr, r.depth + 1, Epsilon);
 
                 return computeColor(ray_r, objList, lsList);
             }
-            else { //Peta aqui
+            else {
                 Vector3D ntl = Vector3D(wo.x * refrac, wo.y * refrac, wo.z * refrac);
-                Vector3D t = cross((-sqrt(rad) + refrac * win), its.normal) - ntl;
-                if (dot(its.normal, t) > 0.0) {
-                    Vector3D new_n = -its.normal;
-                    refrac = 1 / refrac;
-
-                    win = dot(new_n, wo);
-                    sin2alpha = 1 - pow(win, 2);
-                    rad = 1 - pow(refrac, 2) * sin2alpha;
-                    ntl = Vector3D(wo.x * refrac, wo.y * refrac, wo.z * refrac);
-                    t = cross((-sqrt(rad) + refrac * win), new_n) - ntl;
-                }
+                double square = (-sqrt(rad) + refrac * win);
+                Vector3D t = Vector3D(square * n.x, square * n.y, square * n.z) - ntl;
                 Ray ray_refrac(its.itsPoint, t, r.depth + 1);
 
                 return computeColor(ray_refrac, objList, lsList);
             }
         }
-        // Once all light sources have been taken into account, return the final result
         Vector3D Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
         return Lo + Li;
     }
     else
         return bgColor;
-    */
 }

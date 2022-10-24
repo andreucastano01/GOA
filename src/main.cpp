@@ -253,7 +253,7 @@ int main()
 
     //Practica 2
     //Implementation of Mirror and Transmissive
-    Shader* shader = new DirectShader();
+    Shader* shader = new GlobalShader(Vector3D(0.3));
 
     // Build the scene---------------------------------------------------------
     // 

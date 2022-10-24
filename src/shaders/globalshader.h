@@ -7,6 +7,7 @@ class GlobalShader : public Shader
 {
 public:
     GlobalShader();
+    GlobalShader(Vector3D ambient);
     GlobalShader(Vector3D bgColor_, Vector3D ambient);
 
     virtual Vector3D computeColor(const Ray& r,

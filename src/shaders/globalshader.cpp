@@ -37,19 +37,19 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
             //Indirect Illumination
             Vector3D Li(0.0);
             if (r.depth == 0) {
-                int max_samples = 3;
+                int max_samples = 2;
                 Vector3D sumatorio(0.0);
                 for (int i = 0; i < max_samples; i++) {
                     HemisphericalSampler sampler;
                     Vector3D sample = sampler.getSample(its.normal);
                     Ray indirect_ray(its.itsPoint, sample, r.depth + 1, Epsilon);
-                    sumatorio += computeColor(indirect_ray, objList, lsList);
+                    sumatorio += computeColor(indirect_ray, objList, lsList) * its.shape->getMaterial().getReflectance(its.normal, -r.d, indirect_ray.d);
                 }
                 double factor = (1 / (2 * PI * max_samples));
                 Li = Vector3D(factor * sumatorio.x, factor * sumatorio.y, factor * sumatorio.z);
             }
             else if (r.depth > 0) {
-                Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
+                return ambient * its.shape->getMaterial().getDiffuseCoefficient();
             }
             return Lo + Li;
         }

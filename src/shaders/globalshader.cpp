@@ -38,7 +38,7 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
             //Indirect Illumination (2-bounces)
             /*Vector3D Li(0.0);
             if (r.depth == 0) {
-                int max_samples = 2;
+                int max_samples = 4;
                 Vector3D sumatorio(0.0);
                 for (int i = 0; i < max_samples; i++) {
                     HemisphericalSampler sampler;
@@ -53,6 +53,7 @@ Vector3D GlobalShader::computeColor(const Ray& r, const std::vector<Shape*>& obj
                 Li = ambient * its.shape->getMaterial().getDiffuseCoefficient();
             }
             return Lo + Li;*/
+            
             
             //Indirect Illumination (n-bounces)
             Vector3D Li(0.0);
